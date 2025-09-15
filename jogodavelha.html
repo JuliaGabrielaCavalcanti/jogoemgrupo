@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #da9a63;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        #inicio {
+            display: block;
+        }
+        #jogo {
+            display: none;
+        }
+        #tabuleiro {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            margin: 20px auto;
+        }
+        .celula {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            background-color: #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .celula:hover {
+            background-color: #ddd;
+        }
+        .celula:active {
+            background-color: #ccc;
+        }
+        #info {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        .input-container {
+            margin-top: 20px;
+        }
+        .input-container input {
+            padding: 8px;
+            font-size: 1rem;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            width: 50px;
+            text-align: center;
+        }
+        .input-container label {
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            background-color: #e67300;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #dc8d8d;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .game-mode-btns {
+            margin-top: 20px;
+        }
+        .game-mode-btns button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="inicio">
+            <h1>Jogo da Velha</h1>
+            <div class="input-container">
+                <label for="vidas">Escolha o número de vidas:</label>
+                <input type="number" id="vidas" min="1" max="5" value="3">
+            </div>
+            <div class="game-mode-btns">
+                <button onclick="selecionarModo('1vs1')">Multiplayer</button>
+                <button onclick="selecionarModo('bot')">Modo Contra o Bot</button>
+            </div>
+        </div>
+
+        <div id="jogo">
+            <div id="info">
+                <p id="vidasInfo">Vidas: 3</p>
+                <p id="pontosInfo">Pontos: 0</p>
+            </div>
+            <div id="tabuleiro">
+                <!-- Células do tabuleiro -->
+                <div class="celula" onclick="marcar(0)"></div>
+                <div class="celula" onclick="marcar(1)"></div>
+                <div class="celula" onclick="marcar(2)"></div>
+                <div class="celula" onclick="marcar(3)"></div>
+                <div class="celula" onclick="marcar(4)"></div>
+                <div class="celula" onclick="marcar(5)"></div>
+                <div class="celula" onclick="marcar(6)"></div>
+                <div class="celula" onclick="marcar(7)"></div>
+                <div class="celula" onclick="marcar(8)"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let jogador = 'X'; // X começa
+        let tabuleiro = ['', '', '', '', '', '', '', '', '']; // Representação do tabuleiro
+        let vidas = 3;
+        let pontos = 0;
+        let jogoAtivo = true;
+        let modoJogo = ''; // Pode ser '1vs1' ou 'bot'
+        let jogadorBot = 'O'; // O jogador do bot sempre será O
+
+        // Função para selecionar o modo de jogo
+        function selecionarModo(modo) {
+            modoJogo = modo;
+            document.getElementById('inicio').style.display = 'none';
+            document.getElementById('jogo').style.display = 'block';
+            resetarTabuleiro();
+        }
+
+        // Função que inicia o jogo
+        function iniciarJogo() {
+            vidas = parseInt(document.getElementById('vidas').value);
+            if (isNaN(vidas) || vidas < 1 || vidas > 5) {
+                alert("Escolha um número de vidas válido entre 1 e 5!");
+                return;
+            }
+            document.getElementById('inicio').style.display = 'none';
+            document.getElementById('jogo').style.display = 'block';
+            resetarTabuleiro();
+        }
+
+        // Função que marca uma posição no tabuleiro
+        function marcar(pos) {
+            if (tabuleiro[pos] === '' && jogoAtivo) {
+                tabuleiro[pos] = jogador;
+                document.getElementsByClassName('celula')[pos].innerText = jogador;
+                if (checarVitoria()) {
+                    pontos++;
+                    alert(`Jogador ${jogador} venceu!`);
+                    document.getElementById('pontosInfo').innerText = `Pontos: ${pontos}`;
+                    resetarTabuleiro();
+                } else if (tabuleiro.every(celula => celula !== '')) {
+                    alert('Empate!');
+                    resetarTabuleiro();
+                } else {
+                    jogador = (jogador === 'X') ? 'O' : 'X';
+                    if (modoJogo === 'bot' && jogador === jogadorBot) {
+                        setTimeout(jogadaBot, 500);
+                    }
+                }
+            }
+        }
+
+        // Função que verifica se algum jogador ganhou
+        function checarVitoria() {
+            const vitorias = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colunas
+                [0, 4, 8], [2, 4, 6] // Diagonais
+            ];
+            return vitorias.some(combinacao => 
+                tabuleiro[combinacao[0]] === jogador && 
+                tabuleiro[combinacao[1]] === jogador && 
+                tabuleiro[combinacao[2]] === jogador
+            );
+        }
+
+        // Função que reinicia o tabuleiro
+        function resetarTabuleiro() {
+            tabuleiro = ['', '', '', '', '', '', '', '', ''];
+            for (let i = 0; i < 9; i++) {
+                document.getElementsByClassName('celula')[i].innerText = '';
+            }
+            if (vidas > 0) {
+                if (!checarVitoria()) {
+                    vidas--;
+                    document.getElementById('vidasInfo').innerText = `Vidas: ${vidas}`;
+                }
+            } else {
+                alert("Você perdeu todas as vidas!");
+                resetarJogo();
+            }
+            jogador = 'X';
+        }
+
+        // Função para o bot fazer a jogada
+        function jogadaBot() {
+            const posDisponiveis = tabuleiro.map((celula, index) => celula === '' ? index : null).filter(index => index !== null);
+            const posAleatoria = posDisponiveis[Math.floor(Math.random() * posDisponiveis.length)];
+            tabuleiro[posAleatoria] = jogadorBot;
+            document.getElementsByClassName('celula')[posAleatoria].innerText = jogadorBot;
+            if (checarVitoria()) {
+                pontos++;
+                alert(`O Bot (O) venceu!`);
+                document.getElementById('pontosInfo').innerText = `Pontos: ${pontos}`;
+                resetarTabuleiro();
+            } else if (tabuleiro.every(celula => celula !== '')) {
+                alert('Empate!');
+                resetarTabuleiro();
+            } else {
+                jogador = 'X';
+            }
+        }
+
+        // Função para reiniciar o jogo
+        function resetarJogo() {
+            pontos = 0;
+            vidas = 3;
+            document.getElementById('vidasInfo').innerText = `Vidas: ${vidas}`;
+            document.getElementById('pontosInfo').innerText = `Pontos: ${pontos}`;
+            resetarTabuleiro();
+            document.getElementById('inicio').style.display = 'block';
+            document.getElementById('jogo').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
