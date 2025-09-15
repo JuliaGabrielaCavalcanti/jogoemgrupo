@@ -13,3 +13,4 @@ document.getElementById('game3-btn').addEventListener('click', function() {
     window.location.href = 'https://seu-usuario.github.io/seu-repositorio/jogo3.html'; 
 });
 
+
