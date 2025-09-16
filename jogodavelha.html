@@ -1,126 +1,241 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!DOCTYPE html> <!-- Define que este é um documento HTML5 -->
+<html lang="pt-br"> <!-- Inicia o HTML, com a linguagem definida como português do Brasil -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo da Velha</title>
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres como UTF-8 para suportar caracteres especiais -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configura o layout responsivo, para que o conteúdo se ajuste ao tamanho da tela -->
+    <title>Jogo da Velha</title> <!-- Define o título da página, que aparece na aba do navegador -->
     <style>
+        /* Estilos do jogo */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #da9a63;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            font-family: 'Arial', sans-serif; /* Define a fonte como Arial */
+            background-color: #ffc4ff; /* Define a cor de fundo da página */
+            color: #333; /* Define a cor do texto como um tom escuro */
+            display: flex; /* Define o layout como flexbox */
+            justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            align-items: center; /* Centraliza o conteúdo verticalmente */
+            height: 100vh; /* Define a altura da página como 100% da altura da janela */
+            margin: 0; /* Remove a margem padrão do body */
         }
         .container {
-            text-align: center;
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Centraliza o texto dentro do contêiner */
+            background-color: white; /* Define a cor de fundo do contêiner */
+            padding: 30px; /* Adiciona um espaço interno */
+            border-radius: 15px; /* Arredonda as bordas do contêiner */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra leve ao contêiner */
         }
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem; /* Define o tamanho da fonte do título */
+            margin-bottom: 20px; /* Adiciona um espaço abaixo do título */
         }
         #inicio {
-            display: block;
+            display: block; /* Exibe a tela inicial */
         }
         #jogo {
-            display: none;
+            display: none; /* Inicialmente, esconde a tela do jogo */
         }
         #tabuleiro {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-gap: 5px;
-            margin: 20px auto;
+            display: grid; /* Define o tabuleiro como uma grade */
+            grid-template-columns: repeat(3, 100px); /* Cria 3 colunas de 100px de largura */
+            grid-gap: 5px; /* Define o espaçamento entre as células do tabuleiro */
+            margin: 20px auto; /* Adiciona um espaço em cima e centraliza horizontalmente */
         }
         .celula {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 36px;
-            background-color: #eee;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            width: 100px; /* Define a largura de cada célula */
+            height: 100px; /* Define a altura de cada célula */
+            display: flex; /* Usa flexbox para centralizar o conteúdo das células */
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
+            font-size: 36px; /* Define o tamanho da fonte */
+            background-color: #eee; /* Cor de fundo das células */
+            border-radius: 8px; /* Bordas arredondadas das células */
+            cursor: pointer; /* Adiciona o cursor de mão quando passa sobre a célula */
+            transition: background-color 0.3s; /* Transição suave para a cor de fundo */
         }
         .celula:hover {
-            background-color: #ddd;
+            background-color: #ddd; /* Altera a cor da célula ao passar o mouse */
         }
         .celula:active {
-            background-color: #ccc;
+            background-color: #ccc; /* Altera a cor da célula ao clicar */
         }
         #info {
-            font-size: 1.2rem;
-            margin-top: 10px;
+            font-size: 1.2rem; /* Define o tamanho da fonte do painel de informações */
+            margin-top: 10px; /* Adiciona um espaço acima */
         }
         .input-container {
-            margin-top: 20px;
+            margin-top: 20px; /* Adiciona um espaço acima do container de inputs */
         }
         .input-container input {
-            padding: 8px;
-            font-size: 1rem;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            width: 50px;
-            text-align: center;
+            padding: 8px; /* Adiciona preenchimento dentro do campo de input */
+            font-size: 1rem; /* Define o tamanho da fonte do input */
+            border: 2px solid #ccc; /* Define a borda do input */
+            border-radius: 8px; /* Arredonda as bordas do input */
+            width: 50px; /* Define a largura do input */
+            text-align: center; /* Alinha o texto ao centro */
         }
         .input-container label {
-            font-size: 1rem;
-            margin-right: 10px;
+            font-size: 1rem; /* Define o tamanho da fonte do rótulo do input */
+            margin-right: 10px; /* Adiciona um espaço à direita do rótulo */
         }
         button {
-            padding: 12px 25px;
-            font-size: 1.2rem;
-            background-color: #e67300;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            padding: 12px 25px; /* Define o preenchimento do botão */
+            font-size: 1.2rem; /* Define o tamanho da fonte do botão */
+            background-color: #760778; /* Cor de fundo do botão */
+            color: white; /* Cor do texto do botão */
+            border: none; /* Remove a borda do botão */
+            border-radius: 8px; /* Arredonda as bordas do botão */
+            cursor: pointer; /* Define o cursor de mão ao passar o mouse */
+            transition: background-color 0.3s; /* Transição suave para a cor de fundo */
         }
         button:hover {
-            background-color: #dc8d8d;
+            background-color: #ce2ac0; /* Cor de fundo ao passar o mouse sobre o botão */
         }
         button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+            background-color: #ccc; /* Cor de fundo para quando o botão estiver desabilitado */
+            cursor: not-allowed; /* Cursor de "não permitido" quando o botão estiver desabilitado */
         }
         .game-mode-btns {
-            margin-top: 20px;
+            margin-top: 20px; /* Adiciona um espaço acima dos botões de modos de jogo */
         }
         .game-mode-btns button {
-            margin: 10px;
+            margin: 10px; /* Adiciona um espaço entre os botões */
+        }
+
+        /* Estilos do Modal para Instruções */
+        .modal {
+            display: none; /* Inicialmente, o modal está oculto */
+            position: fixed; /* Fixação do modal na tela */
+            z-index: 1; /* Garante que o modal fique sobre outros elementos */
+            left: 0; /* Posiciona o modal à esquerda */
+            top: 0; /* Posiciona o modal no topo */
+            width: 100%; /* O modal ocupa toda a largura da tela */
+            height: 100%; /* O modal ocupa toda a altura da tela */
+            overflow: auto; /* Permite rolar caso o conteúdo ultrapasse o tamanho da tela */
+            background-color: rgba(0, 0, 0, 0.4); /* Fundo semitransparente */
+        }
+        .modal-content {
+            background-color: white; /* Fundo branco do conteúdo do modal */
+            padding: 20px; /* Preenchimento interno do conteúdo */
+            border-radius: 8px; /* Bordas arredondadas */
+            text-align: center; /* Alinha o conteúdo ao centro */
+            position: absolute; /* Posiciona o conteúdo do modal */
+            top: 50%; /* Alinha verticalmente no meio */
+            left: 50%; /* Alinha horizontalmente no meio */
+            transform: translate(-50%, -50%); /* Ajusta o conteúdo para o centro exato */
+            width: 80%; /* Define a largura do modal */
+            max-width: 400px; /* Define a largura máxima do modal */
+        }
+        .modal-header {
+            font-size: 2rem; /* Define o tamanho da fonte do cabeçalho do modal */
+            font-weight: bold; /* Deixa o cabeçalho em negrito */
+            margin-bottom: 10px; /* Adiciona um espaço abaixo do cabeçalho */
+        }
+        .modal-body {
+            font-size: 1.5rem; /* Define o tamanho da fonte do corpo do modal */
+            margin-bottom: 20px; /* Adiciona um espaço abaixo do corpo */
+        }
+        .modal-footer {
+            text-align: center; /* Centraliza o texto do rodapé */
+        }
+        .close {
+            color: #aaa; /* Cor do botão de fechar */
+            font-size: 2rem; /* Tamanho da fonte do botão de fechar */
+            font-weight: bold; /* Deixa o botão de fechar em negrito */
+            cursor: pointer; /* Cursor de mão ao passar o mouse */
+        }
+        .close:hover,
+        .close:focus {
+            color: black; /* Altera a cor para preto quando o mouse passa sobre o botão de fechar */
+            text-decoration: none; /* Remove o sublinhado */
+            cursor: pointer; /* Cursor de mão */
+        }
+
+        /* Novo estilo para o botão de Instruções */
+        .instrucoes-btn {
+            padding: 6px 12px; /* Adiciona o preenchimento do botão de instruções */
+            font-size: 1rem; /* Tamanho da fonte do botão de instruções */
+            background-color: #48C9B0; /* Cor de fundo do botão de instruções */
+            color: white; /* Cor do texto do botão de instruções */
+            border: none; /* Remove a borda do botão */
+            border-radius: 5px; /* Arredonda as bordas */
+            cursor: pointer; /* Cursor de mão ao passar o mouse */
+            transition: background-color 0.3s; /* Transição suave para a cor de fundo */
+        }
+        .instrucoes-btn:hover {
+            background-color: #1ABC9C; /* Cor do botão ao passar o mouse */
+        }
+
+        /* Estilo do botão de Instruções embaixo do quadro branco */
+        .instrucoes-container {
+            margin-top: 20px; /* Adiciona um espaço acima do botão de instruções */
+        }
+
+        /* Estilos de Fim de Jogo */
+        #fimDeJogo {
+            display: none; /* O painel de fim de jogo começa oculto */
+            position: fixed; /* Fixação do painel na tela */
+            top: 50%; /* Posiciona verticalmente no meio */
+            left: 50%; /* Posiciona horizontalmente no meio */
+            transform: translate(-50%, -50%); /* Ajusta para o centro exato */
+            background-color: #fff; /* Cor de fundo do painel de fim de jogo */
+            border-radius: 12px; /* Arredonda as bordas */
+            padding: 40px 60px; /* Preenchimento interno do painel */
+            text-align: center; /* Centraliza o texto */
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15); /* Sombra suave ao redor do painel */
+            animation: aparecer 0.8s ease-in-out; /* Animação para o aparecimento do painel */
+        }
+        #fimDeJogo h2 {
+            font-size: 3rem; /* Define o tamanho da fonte do título de fim de jogo */
+            margin-bottom: 20px; /* Adiciona um espaço abaixo do título */
+            color: #760778; /* Cor do título */
+        }
+        #fimDeJogo p {
+            font-size: 1.5rem; /* Define o tamanho da fonte da mensagem de resultado */
+            margin-top: 10px; /* Adiciona um espaço acima da mensagem de resultado */
+        }
+        @keyframes aparecer {
+            0% {
+                opacity: 0; /* Começa invisível */
+                transform: scale(0.5); /* Começa com escala reduzida */
+            }
+            100% {
+                opacity: 1; /* Fica visível */
+                transform: scale(1); /* Escala normal */
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Tela de início do jogo -->
         <div id="inicio">
             <h1>Jogo da Velha</h1>
+            <!-- Input para escolher o número de rodadas -->
             <div class="input-container">
-                <label for="vidas">Escolha o número de vidas:</label>
-                <input type="number" id="vidas" min="1" max="5" value="3">
+                <label for="rodadas">Escolha o número de rodadas:</label>
+                <input type="number" id="rodadas" min="1" max="10" value="3"> <!-- Número de rodadas -->
             </div>
+            <!-- Botões para selecionar o modo de jogo -->
             <div class="game-mode-btns">
-                <button onclick="selecionarModo('1vs1')">Multiplayer</button>
-                <button onclick="selecionarModo('bot')">Modo Contra o Bot</button>
+                <button onclick="selecionarModo('1vs1')">Multiplayer</button> <!-- Modo multiplayer -->
+                <button onclick="selecionarModo('bot')">Modo Contra o Bot</button> <!-- Modo contra o bot -->
             </div>
         </div>
 
+        <!-- Botão de instruções -->
+        <div class="instrucoes-container">
+            <button class="instrucoes-btn" onclick="exibirInstrucoes()">Instruções de Uso</button> 
+        </div>
+
+        <!-- Tela de jogo -->
         <div id="jogo">
             <div id="info">
-                <p id="vidasInfo">Vidas: 3</p>
-                <p id="pontosInfo">Pontos: 0</p>
+                <!-- Informações sobre o jogo -->
+                <p id="rodadasInfo">Rodadas: 3</p>
+                <p id="pontosX">Pontos X: 0</p>
+                <p id="pontosO">Pontos O: 0</p>
             </div>
+            <!-- Tabuleiro do jogo -->
             <div id="tabuleiro">
-                <!-- Células do tabuleiro -->
                 <div class="celula" onclick="marcar(0)"></div>
                 <div class="celula" onclick="marcar(1)"></div>
                 <div class="celula" onclick="marcar(2)"></div>
@@ -134,117 +249,172 @@
         </div>
     </div>
 
+    <!-- Modal de fim de jogo -->
+    <div id="fimDeJogo">
+        <h2 id="mensagemFimDeJogo"></h2>
+        <p id="resultadoFinal">Obrigado por jogar!</p>
+        <button onclick="reiniciarJogo()">Jogar novamente</button> <!-- Botão para reiniciar o jogo -->
+    </div>
+
+    <!-- Modal de instruções -->
+    <div id="instrucoesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="fecharInstrucoes()">&times;</span> <!-- Fechar modal -->
+                <h2>Instruções</h2> <!-- Título das instruções -->
+            </div>
+            <div class="modal-body">
+                <p>1. Selecione o número de rodadas e o modo de jogo.</p>
+                <p>2. Jogue clicando nas células do tabuleiro.</p>
+                <p>3. Se todas as células forem preenchidas ou alguém vencer, a rodada acaba.</p>
+                <p>4. O número de rodadas será reduzido a cada final de partida.</p>
+                <p>5. O jogo terminará quando o número de rodadas for 0.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Áudio de fundo e de vitória -->
+    <audio id="musicaFundo" loop>
+        <source src="musicadefundo.mp3" type="audio/mp3">
+    </audio>
+    <audio id="musicaVitoria">
+        <source src="musicadevitoria.mp3" type="audio/mp3">
+    </audio>
+
     <script>
-        let jogador = 'X'; // X começa
-        let tabuleiro = ['', '', '', '', '', '', '', '', '']; // Representação do tabuleiro
-        let vidas = 3;
-        let pontos = 0;
-        let jogoAtivo = true;
-        let modoJogo = ''; // Pode ser '1vs1' ou 'bot'
-        let jogadorBot = 'O'; // O jogador do bot sempre será O
+        let jogador = 'X'; /* O jogador atual é 'X' */
+        let tabuleiro = ['', '', '', '', '', '', '', '', '']; /* Tabuleiro vazio inicial */
+        let rodadas = parseInt(document.getElementById('rodadas').value); /* Define o número de rodadas */
+        let pontosX = 0; /* Pontos do jogador 'X' */
+        let pontosO = 0; /* Pontos do jogador 'O' */
+        let modoJogo = ''; /* Modo de jogo, será '1vs1' ou 'bot' */
+        let jogadorBot = 'O'; /* O bot sempre joga como 'O' */
+        let jogoAtivo = true; /* Variável que controla se o jogo está ativo */
 
-        // Função para selecionar o modo de jogo
+        // Função de seleção do modo de jogo
         function selecionarModo(modo) {
-            modoJogo = modo;
-            document.getElementById('inicio').style.display = 'none';
-            document.getElementById('jogo').style.display = 'block';
-            resetarTabuleiro();
+            modoJogo = modo; /* Define o modo de jogo */
+            rodadas = parseInt(document.getElementById('rodadas').value); /* Atualiza o número de rodadas */
+            document.getElementById('inicio').style.display = 'none'; /* Esconde a tela inicial */
+            document.getElementById('jogo').style.display = 'block'; /* Exibe a tela do jogo */
+            atualizarInfo(); /* Atualiza as informações do jogo */
+            iniciarMusicaFundo(); /* Inicia a música de fundo */
         }
 
-        // Função que inicia o jogo
-        function iniciarJogo() {
-            vidas = parseInt(document.getElementById('vidas').value);
-            if (isNaN(vidas) || vidas < 1 || vidas > 5) {
-                alert("Escolha um número de vidas válido entre 1 e 5!");
-                return;
-            }
-            document.getElementById('inicio').style.display = 'none';
-            document.getElementById('jogo').style.display = 'block';
-            resetarTabuleiro();
+        function iniciarMusicaFundo() {
+            const musicaFundo = document.getElementById('musicaFundo');
+            musicaFundo.play(); /* Reproduz a música de fundo */
         }
 
-        // Função que marca uma posição no tabuleiro
+        function pararMusicaVitoria() {
+            const musicaVitoria = document.getElementById('musicaVitoria');
+            musicaVitoria.pause(); /* Pausa a música de vitória */
+            musicaVitoria.currentTime = 0; /* Reseta o tempo da música */
+        }
+
+        function atualizarInfo() {
+            document.getElementById('rodadasInfo').innerText = `Rodadas: ${rodadas}`;
+            document.getElementById('pontosX').innerText = `Pontos X: ${pontosX}`;
+            document.getElementById('pontosO').innerText = `Pontos O: ${pontosO}`;
+        }
+
         function marcar(pos) {
-            if (tabuleiro[pos] === '' && jogoAtivo) {
-                tabuleiro[pos] = jogador;
-                document.getElementsByClassName('celula')[pos].innerText = jogador;
-                if (checarVitoria()) {
-                    pontos++;
-                    alert(`Jogador ${jogador} venceu!`);
-                    document.getElementById('pontosInfo').innerText = `Pontos: ${pontos}`;
-                    resetarTabuleiro();
-                } else if (tabuleiro.every(celula => celula !== '')) {
-                    alert('Empate!');
+            if (!jogoAtivo || tabuleiro[pos]) return; /* Se o jogo não está ativo ou a célula já está marcada, não faz nada */
+            
+            tabuleiro[pos] = jogador; /* Marca a célula com o jogador atual */
+            document.querySelectorAll('.celula')[pos].innerText = jogador; /* Atualiza a célula na interface */
+
+            if (verificarVitoria()) { /* Verifica se o jogador venceu */
+                if (jogador === 'X') {
+                    pontosX++; /* Aumenta os pontos do jogador 'X' */
+                } else {
+                    pontosO++; /* Aumenta os pontos do jogador 'O' */
+                }
+                if (rodadas > 1) { /* Se ainda houver rodadas, diminui e reseta o tabuleiro */
+                    rodadas--; 
                     resetarTabuleiro();
                 } else {
-                    jogador = (jogador === 'X') ? 'O' : 'X';
-                    if (modoJogo === 'bot' && jogador === jogadorBot) {
-                        setTimeout(jogadaBot, 500);
-                    }
+                    fimDeJogo(); /* Se não houver mais rodadas, termina o jogo */
+                }
+            } else if (tabuleiro.every(celula => celula)) { /* Se todas as células estão preenchidas (empate) */
+                if (rodadas > 1) { /* Se ainda houver rodadas, diminui e reseta o tabuleiro */
+                    rodadas--;
+                    resetarTabuleiro();
+                } else {
+                    fimDeJogo(); /* Se não houver mais rodadas, termina o jogo */
+                }
+            } else {
+                jogador = jogador === 'X' ? 'O' : 'X'; /* Alterna entre os jogadores */
+                if (modoJogo === 'bot' && jogador === jogadorBot) {
+                    setTimeout(jogadaBot, 500); /* Se o modo for contra o bot e o jogador for o bot, faz a jogada após 500ms */
                 }
             }
+            atualizarInfo(); /* Atualiza as informações do jogo */
         }
 
-        // Função que verifica se algum jogador ganhou
-        function checarVitoria() {
-            const vitorias = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
-                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colunas
-                [0, 4, 8], [2, 4, 6] // Diagonais
-            ];
-            return vitorias.some(combinacao => 
-                tabuleiro[combinacao[0]] === jogador && 
-                tabuleiro[combinacao[1]] === jogador && 
-                tabuleiro[combinacao[2]] === jogador
-            );
+        function fimDeJogo() {
+            const musicaVitoria = document.getElementById('musicaVitoria');
+            musicaVitoria.play(); /* T toca a música de vitória */
+            
+            let vencedor = '';
+            if (pontosX > pontosO) vencedor = 'X'; /* Se X tiver mais pontos, X venceu */
+            else if (pontosO > pontosX) vencedor = 'O'; /* Se O tiver mais pontos, O venceu */
+            else vencedor = 'Empate'; /* Se estiver empatado */
+            
+            const mensagem = vencedor === 'Empate' ? 'O jogo terminou em empate!' : `${vencedor} venceu!`; /* Mensagem do vencedor */
+            document.getElementById('mensagemFimDeJogo').innerText = mensagem; /* Exibe mensagem de fim de jogo */
+            document.getElementById('fimDeJogo').style.display = 'block'; /* Exibe o painel de fim de jogo */
         }
 
-        // Função que reinicia o tabuleiro
+        function reiniciarJogo() {
+            rodadas = parseInt(document.getElementById('rodadas').value); /* Atualiza o número de rodadas */
+            pontosX = 0; /* Reseta os pontos de X */
+            pontosO = 0; /* Reseta os pontos de O */
+            resetarTabuleiro(); /* Reseta o tabuleiro */
+            document.getElementById('fimDeJogo').style.display = 'none'; /* Esconde o painel de fim de jogo */
+            document.getElementById('inicio').style.display = 'block'; /* Exibe a tela inicial */
+            document.getElementById('jogo').style.display = 'none'; /* Esconde a tela de jogo */
+            pararMusicaVitoria(); /* Para a música de vitória */
+            atualizarInfo(); /* Atualiza as informações do jogo */
+        }
+
         function resetarTabuleiro() {
-            tabuleiro = ['', '', '', '', '', '', '', '', ''];
-            for (let i = 0; i < 9; i++) {
-                document.getElementsByClassName('celula')[i].innerText = '';
-            }
-            if (vidas > 0) {
-                if (!checarVitoria()) {
-                    vidas--;
-                    document.getElementById('vidasInfo').innerText = `Vidas: ${vidas}`;
-                }
-            } else {
-                alert("Você perdeu todas as vidas!");
-                resetarJogo();
-            }
-            jogador = 'X';
+            tabuleiro = ['', '', '', '', '', '', '', '', '']; /* Reseta o tabuleiro */
+            const celulas = document.querySelectorAll('.celula');
+            celulas.forEach(celula => celula.innerText = ''); /* Limpa o texto de todas as células */
+            jogador = 'X'; /* Começa novamente com o jogador X */
+            jogoAtivo = true; /* O jogo fica ativo */
         }
 
-        // Função para o bot fazer a jogada
+        function verificarVitoria() {
+            const vitorias = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], /* Linhas */
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], /* Colunas */
+                [0, 4, 8], [2, 4, 6] /* Diagonais */
+            ];
+
+            return vitorias.some(comb => {
+                const [a, b, c] = comb;
+                return tabuleiro[a] && tabuleiro[a] === tabuleiro[b] && tabuleiro[a] === tabuleiro[c];
+            }); /* Verifica se qualquer combinação de células é igual */
+        }
+
+        function exibirInstrucoes() {
+            document.getElementById('instrucoesModal').style.display = 'block'; /* Exibe o modal de instruções */
+        }
+
+        function fecharInstrucoes() {
+            document.getElementById('instrucoesModal').style.display = 'none'; /* Fecha o modal de instruções */
+        }
+
+        // Função que faz a jogada do bot
         function jogadaBot() {
-            const posDisponiveis = tabuleiro.map((celula, index) => celula === '' ? index : null).filter(index => index !== null);
-            const posAleatoria = posDisponiveis[Math.floor(Math.random() * posDisponiveis.length)];
-            tabuleiro[posAleatoria] = jogadorBot;
-            document.getElementsByClassName('celula')[posAleatoria].innerText = jogadorBot;
-            if (checarVitoria()) {
-                pontos++;
-                alert(`O Bot (O) venceu!`);
-                document.getElementById('pontosInfo').innerText = `Pontos: ${pontos}`;
-                resetarTabuleiro();
-            } else if (tabuleiro.every(celula => celula !== '')) {
-                alert('Empate!');
-                resetarTabuleiro();
-            } else {
-                jogador = 'X';
-            }
+            let jogada = obterMelhorJogada(); /* Obtém a melhor jogada do bot */
+            marcar(jogada); /* Faz a jogada no tabuleiro */
         }
 
-        // Função para reiniciar o jogo
-        function resetarJogo() {
-            pontos = 0;
-            vidas = 3;
-            document.getElementById('vidasInfo').innerText = `Vidas: ${vidas}`;
-            document.getElementById('pontosInfo').innerText = `Pontos: ${pontos}`;
-            resetarTabuleiro();
-            document.getElementById('inicio').style.display = 'block';
-            document.getElementById('jogo').style.display = 'none';
+        function obterMelhorJogada() {
+            return tabuleiro.findIndex(celula => celula === ''); /* Escolhe a primeira célula vazia */
         }
     </script>
 </body>
