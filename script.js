@@ -10,8 +10,9 @@ document.getElementById('game2-btn').addEventListener('click', function() {
 
 document.getElementById('game3-btn').addEventListener('click', function() {
     // Redireciona para o Jogo 3 (GitHub Pages)
-    window.location.href = 'https://acsa3103.github.io/Jogo-Snake/JogoSnake.html'; 
+    window.location.href = 'https://acsa3103.github.io/Jogo-Snake/SnakeAtualizado.html'; 
 });
+
 
 
 
