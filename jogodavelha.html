@@ -283,6 +283,7 @@
 
     <script>
         let jogador = 'X'; /* O jogador atual é 'X' */
+        let jogadorInicial = 'X'; /* Controla quem começa a rodada */
         let tabuleiro = ['', '', '', '', '', '', '', '', '']; /* Tabuleiro vazio inicial */
         let rodadas = parseInt(document.getElementById('rodadas').value); /* Define o número de rodadas */
         let pontosX = 0; /* Pontos do jogador 'X' */
@@ -290,7 +291,7 @@
         let modoJogo = ''; /* Modo de jogo, será '1vs1' ou 'bot' */
         let jogadorBot = 'O'; /* O bot sempre joga como 'O' */
         let jogoAtivo = true; /* Variável que controla se o jogo está ativo */
-
+    
         // Função de seleção do modo de jogo
         function selecionarModo(modo) {
             modoJogo = modo; /* Define o modo de jogo */
@@ -299,47 +300,67 @@
             document.getElementById('jogo').style.display = 'block'; /* Exibe a tela do jogo */
             atualizarInfo(); /* Atualiza as informações do jogo */
             iniciarMusicaFundo(); /* Inicia a música de fundo */
+            jogadorInicial = 'X'; // Reinicia quem começa a rodada ao iniciar modo
+            jogador = jogadorInicial;
         }
-
+    
         function iniciarMusicaFundo() {
             const musicaFundo = document.getElementById('musicaFundo');
             musicaFundo.play(); /* Reproduz a música de fundo */
         }
-
+    
         function pararMusicaVitoria() {
             const musicaVitoria = document.getElementById('musicaVitoria');
             musicaVitoria.pause(); /* Pausa a música de vitória */
             musicaVitoria.currentTime = 0; /* Reseta o tempo da música */
         }
-
+    
         function atualizarInfo() {
             document.getElementById('rodadasInfo').innerText = `Rodadas: ${rodadas}`;
             document.getElementById('pontosX').innerText = `Pontos X: ${pontosX}`;
             document.getElementById('pontosO').innerText = `Pontos O: ${pontosO}`;
         }
-
+    
         function marcar(pos) {
             if (!jogoAtivo || tabuleiro[pos]) return; /* Se o jogo não está ativo ou a célula já está marcada, não faz nada */
-            
+    
             tabuleiro[pos] = jogador; /* Marca a célula com o jogador atual */
             document.querySelectorAll('.celula')[pos].innerText = jogador; /* Atualiza a célula na interface */
-
+    
             if (verificarVitoria()) { /* Verifica se o jogador venceu */
                 if (jogador === 'X') {
                     pontosX++; /* Aumenta os pontos do jogador 'X' */
                 } else {
                     pontosO++; /* Aumenta os pontos do jogador 'O' */
                 }
+    
+                jogoAtivo = false; // Pausa o jogo para a próxima rodada
+                jogadorInicial = jogador; // Quem venceu começa a próxima rodada
+    
                 if (rodadas > 1) { /* Se ainda houver rodadas, diminui e reseta o tabuleiro */
-                    rodadas--; 
-                    resetarTabuleiro();
+                    rodadas--;
+                    setTimeout(() => {
+                        resetarTabuleiro();
+                        atualizarInfo();
+                        if (modoJogo === 'bot' && jogadorInicial === jogadorBot) {
+                            setTimeout(jogadaBot, 500); // Bot joga primeiro se for o inicial
+                        }
+                    }, 1500); // Espera 1.5s antes de resetar para o jogador ver o resultado
                 } else {
                     fimDeJogo(); /* Se não houver mais rodadas, termina o jogo */
                 }
             } else if (tabuleiro.every(celula => celula)) { /* Se todas as células estão preenchidas (empate) */
+                jogoAtivo = false; // Pausa o jogo para a próxima rodada
+                // Em caso de empate, mantém quem começou a rodada anterior
                 if (rodadas > 1) { /* Se ainda houver rodadas, diminui e reseta o tabuleiro */
                     rodadas--;
-                    resetarTabuleiro();
+                    setTimeout(() => {
+                        resetarTabuleiro();
+                        atualizarInfo();
+                        if (modoJogo === 'bot' && jogadorInicial === jogadorBot) {
+                            setTimeout(jogadaBot, 500);
+                        }
+                    }, 1500); // Espera 1.5s antes de resetar para o jogador ver o empate
                 } else {
                     fimDeJogo(); /* Se não houver mais rodadas, termina o jogo */
                 }
@@ -351,25 +372,26 @@
             }
             atualizarInfo(); /* Atualiza as informações do jogo */
         }
-
+    
         function fimDeJogo() {
             const musicaVitoria = document.getElementById('musicaVitoria');
             musicaVitoria.play(); /* T toca a música de vitória */
-            
+    
             let vencedor = '';
             if (pontosX > pontosO) vencedor = 'X'; /* Se X tiver mais pontos, X venceu */
             else if (pontosO > pontosX) vencedor = 'O'; /* Se O tiver mais pontos, O venceu */
             else vencedor = 'Empate'; /* Se estiver empatado */
-            
+    
             const mensagem = vencedor === 'Empate' ? 'O jogo terminou em empate!' : `${vencedor} venceu!`; /* Mensagem do vencedor */
             document.getElementById('mensagemFimDeJogo').innerText = mensagem; /* Exibe mensagem de fim de jogo */
             document.getElementById('fimDeJogo').style.display = 'block'; /* Exibe o painel de fim de jogo */
         }
-
+    
         function reiniciarJogo() {
             rodadas = parseInt(document.getElementById('rodadas').value); /* Atualiza o número de rodadas */
             pontosX = 0; /* Reseta os pontos de X */
             pontosO = 0; /* Reseta os pontos de O */
+            jogadorInicial = 'X'; // Reseta para X começar no reinício
             resetarTabuleiro(); /* Reseta o tabuleiro */
             document.getElementById('fimDeJogo').style.display = 'none'; /* Esconde o painel de fim de jogo */
             document.getElementById('inicio').style.display = 'block'; /* Exibe a tela inicial */
@@ -377,45 +399,46 @@
             pararMusicaVitoria(); /* Para a música de vitória */
             atualizarInfo(); /* Atualiza as informações do jogo */
         }
-
+    
         function resetarTabuleiro() {
             tabuleiro = ['', '', '', '', '', '', '', '', '']; /* Reseta o tabuleiro */
             const celulas = document.querySelectorAll('.celula');
             celulas.forEach(celula => celula.innerText = ''); /* Limpa o texto de todas as células */
-            jogador = 'X'; /* Começa novamente com o jogador X */
+            jogador = jogadorInicial; /* Começa novamente com o jogador que deve iniciar */
             jogoAtivo = true; /* O jogo fica ativo */
         }
-
+    
         function verificarVitoria() {
             const vitorias = [
                 [0, 1, 2], [3, 4, 5], [6, 7, 8], /* Linhas */
                 [0, 3, 6], [1, 4, 7], [2, 5, 8], /* Colunas */
                 [0, 4, 8], [2, 4, 6] /* Diagonais */
             ];
-
+    
             return vitorias.some(comb => {
                 const [a, b, c] = comb;
                 return tabuleiro[a] && tabuleiro[a] === tabuleiro[b] && tabuleiro[a] === tabuleiro[c];
             }); /* Verifica se qualquer combinação de células é igual */
         }
-
+    
         function exibirInstrucoes() {
             document.getElementById('instrucoesModal').style.display = 'block'; /* Exibe o modal de instruções */
         }
-
+    
         function fecharInstrucoes() {
             document.getElementById('instrucoesModal').style.display = 'none'; /* Fecha o modal de instruções */
         }
-
+    
         // Função que faz a jogada do bot
         function jogadaBot() {
             let jogada = obterMelhorJogada(); /* Obtém a melhor jogada do bot */
             marcar(jogada); /* Faz a jogada no tabuleiro */
         }
-
+    
         function obterMelhorJogada() {
             return tabuleiro.findIndex(celula => celula === ''); /* Escolhe a primeira célula vazia */
         }
     </script>
+    
 </body>
 </html>
