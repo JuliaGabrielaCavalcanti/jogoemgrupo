@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela Principal</title>
+    <title>Tabela de Jogos</title>
     <style>
         /* Resetando estilos básicos */
         * {
@@ -12,63 +12,80 @@
             box-sizing: border-box;
         }
 
-        /* Definindo o fundo da página e centralizando o conteúdo */
+        /* Definindo o fundo da página com a imagem enviada */
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1fb7bf, #4cabb0);
+            background: url('futu.png') no-repeat center center fixed;
+            background-size: cover;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #fff;
+            color: #ffffff;
             overflow: hidden;
         }
 
         /* Container principal */
         .container {
             text-align: center;
-            background: rgba(0, 56, 78, 0.7);
+            background: rgb(30, 185, 185);
             padding: 40px;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
             width: 100%;
             max-width: 500px;
-            display: flex;             /* Flexbox */
-            flex-direction: column;    /* Organiza os itens em coluna */
-            justify-content: center;   /* Centraliza os itens verticalmente */
-            align-items: center;       /* Centraliza os itens horizontalmente */
-            height: 80vh;              /* Altura do container */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            animation: slideUp 1s ease-out forwards;
+        }
+
+        /* Animação de subida do container */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Título */
         h1 {
-            font-size: 36px;
-            margin-bottom: 40px;
+            font-size: 40px;
+            margin-bottom: 30px;
             text-transform: uppercase;
             letter-spacing: 3px;
-            font-weight: 600;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         /* Estilizando os botões */
         .game-btn {
-            background: linear-gradient(45deg, #790069, #ff34b5);
+            background: linear-gradient(45deg, #e73ec2, #f01281);
             color: white;
             font-size: 20px;
             font-weight: bold;
             border: none;
             padding: 15px 40px;
             border-radius: 8px;
-            margin: 10px 0; /* Espaçamento entre os botões */
+            margin: 10px 0;
             cursor: pointer;
             outline: none;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         /* Efeito de hover e clique nos botões */
         .game-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
         }
 
         .game-btn:active {
@@ -76,7 +93,7 @@
             box-shadow: none;
         }
 
-        /* Adicionando animação suave nos botões */
+        /* Animação suave nos botões */
         .game-btn:nth-child(1) {
             animation: fadeIn 0.5s ease-out 0.2s forwards;
         }
@@ -113,17 +130,17 @@
 
     <script>
         document.getElementById('game1-btn').addEventListener('click', function() {
-            // Redireciona para o Jogo 1 (GitHub Pages)
+            // Redireciona para o Jogo 1
             window.location.href = 'https://mirellaribeiro30.github.io/3Jogos/falling.html'; 
         });
 
         document.getElementById('game2-btn').addEventListener('click', function() {
-            // Redireciona para o Jogo 2 (GitHub Pages)
+            // Redireciona para o Jogo 2
             window.location.href = 'https://juliagabrielacavalcanti.github.io/jogodavelha/jogodavelha.html'; 
         });
 
         document.getElementById('game3-btn').addEventListener('click', function() {
-            // Redireciona para o Jogo 3 (GitHub Pages)
+            // Redireciona para o Jogo 3
             window.location.href = 'https://acsa3103.github.io/Jogo-Snake/SnakeAtualizado.html'; 
         });
     </script>
